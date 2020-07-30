@@ -1,13 +1,45 @@
-from flask import Flask, render_template, redirect
+from db import DataBase
+from random import choice
+from requests import get, exceptions
+from string import ascii_letters, digits
+from flask import Flask, render_template, redirect, request
 
 
 app = Flask(__name__)
+db = DataBase()
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def main():
-	return render_template('index.html')
-	
+	if request.method=='GET':
+		return render_template('index.html')
+
+	else:
+		data = {}
+
+		data['link'] = request.form['link']
+
+		try:
+			get(data['link'])
+
+			symbols = ascii_letters + digits
+
+			while True:
+
+				data['code'] = ''
+
+				for i in range(7):
+					data['code'] += choice(symbols)
+
+				if not db.return_unit(data['code']):
+					db.write(data['code'], data['link'])
+					break
+
+			return render_template('result.html', data=data)
+
+		except exceptions.MissingSchema:
+			return render_template('index.html')
+
 
 if __name__ == '__main__':
 	app.run()
