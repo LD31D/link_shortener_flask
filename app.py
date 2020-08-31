@@ -1,9 +1,8 @@
-from db import DataBase
-from random import choice
 from requests import get, exceptions
-from string import ascii_letters, digits
 from flask import Flask, render_template, redirect, request
 
+from db import DataBase
+from func import create_code
 
 app = Flask(__name__)
 db = DataBase()
@@ -22,14 +21,9 @@ def main():
 		try:
 			get(data['link'])
 
-			symbols = ascii_letters + digits
-
 			while True:
 
-				data['code'] = ''
-
-				for i in range(7):
-					data['code'] += choice(symbols)
+				data['code'] = create_code()
 
 				if not db.return_unit(data['code']):
 					db.write(data['code'], data['link'])
