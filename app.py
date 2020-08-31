@@ -2,7 +2,7 @@ from requests import get, exceptions
 from flask import Flask, render_template, redirect, request
 
 from db import DataBase
-from func import create_code
+from func import new_link
 
 app = Flask(__name__)
 db = DataBase()
@@ -21,13 +21,7 @@ def main():
 		try:
 			get(data['link'])
 
-			while True:
-
-				data['code'] = create_code()
-
-				if not db.return_unit(data['code']):
-					db.write(data['code'], data['link'])
-					break
+			data['code'] = new_link(data['link'], db)
 
 			return render_template('result.html', data=data)
 
