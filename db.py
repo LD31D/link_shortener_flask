@@ -6,15 +6,11 @@ class DataBase:
 	def __init__(self):
 		self.create_connect()
 
-		try:
-			self.cursor.execute(''' CREATE TABLE short_links (
+		self.cursor.execute(''' CREATE TABLE IF NOT EXISTS short_links (
 													code TEXT PRIMARY KEY,
 													link TEXT
 												   ) 
 							''')
-
-		except sqlite3.OperationalError:
-			pass
 
 		self.break_connection()
 
@@ -39,10 +35,13 @@ class DataBase:
 		self.create_connect()
 
 		sql = ' SELECT * FROM short_links WHERE code=?'
-
 		self.cursor.execute(sql, [(code)])
 		unit = self.cursor.fetchall()
 
 		self.break_connection()
 
-		return unit
+		try:
+			return unit[0]
+
+		except IndexError:
+			return None

@@ -34,7 +34,7 @@ def redirect_to_link(code):
 	unit = db.return_unit(code)
 
 	if unit:
-		return redirect(unit[0][1])
+		return redirect(unit[1])
 
 	else:
 		return redirect('/')
