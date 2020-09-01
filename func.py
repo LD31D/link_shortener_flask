@@ -2,6 +2,7 @@ from random import choice
 from string import ascii_letters, digits
 
 from db import DataBase
+from config import host
 
 
 def create_code():
@@ -22,4 +23,4 @@ def new_link(link: str, db=DataBase()):
 			db.write(code, link)
 			break
 
-	return code
+	return host + '/' + code

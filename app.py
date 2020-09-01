@@ -21,7 +21,7 @@ def main():
 		try:
 			get(data['link'])
 
-			data['code'] = new_link(data['link'], db)
+			data['new_link'] = new_link(data['link'], db)
 
 			return render_template('result.html', data=data)
 
@@ -45,11 +45,11 @@ def api_new_link():
 	if 'link' in request.args:
 
 		link = request.args['link']
-		code = new_link(link, db)
+		new_link = new_link(link, db)
 
 		return jsonify({
 			'link': link, 
-			'code': code
+			'new_link': new_link
 			})
 
 
