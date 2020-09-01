@@ -1,5 +1,5 @@
 from requests import get, exceptions
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, jsonify
 
 from db import DataBase
 from func import new_link
@@ -38,6 +38,19 @@ def redirect_to_link(code):
 
 	else:
 		return redirect('/')
+
+
+@app.route('/api/new_link')
+def api_new_link():
+	if 'link' in request.args:
+
+		link = request.args['link']
+		code = new_link(link, db)
+
+		return jsonify({
+			'link': link, 
+			'code': code
+			})
 
 
 if __name__ == '__main__':
